@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.LinkedList;
-import java.util.Queue;
 
 public class Interpreter {
     private InputStream in;
@@ -29,7 +28,7 @@ public class Interpreter {
         this.in = input;
         this.out = output;
         this.fields = new int[memorySize];
-        this.openedLoops = new LinkedList<Integer>();
+        this.openedLoops = new LinkedList<>();
         this.objectDefinitions = definitions;
     }
 
@@ -39,7 +38,8 @@ public class Interpreter {
         this.openedLoops.clear();
         int pointer = bfo.getPointer();
         try {
-            for (int i = 0; i < arr.length-1;i++) {
+            for (int i = 0; i < arr.length;i++) {
+               boolean returnValue = false;
                 switch (arr[i]) {
                     case '+':
                         this.fields[pointer] +=1;
@@ -84,10 +84,11 @@ public class Interpreter {
                         }
                         break;
                     case ']':
-                        i = this.openedLoops.pollFirst() -1;
+                            i = this.openedLoops.pollFirst() - 1;
                         break;
                     case '.':
                         this.out.write(this.fields[pointer]);
+                        this.out.flush();
                         break;
                     case ',':
                         this.fields[pointer] = this.in.read();
@@ -99,33 +100,62 @@ public class Interpreter {
                         break;
                     case '/':
                         i++;
-                        String numberTmp = "";
+                        StringBuilder numberTmp = new StringBuilder();
                         while(arr[i] != '\\'){
-                            numberTmp+=arr[i];
+                            numberTmp.append(arr[i]);
                             i++;
                         }
-                        int methodId = Integer.parseInt(numberTmp);
+                        int methodId = Integer.parseInt(numberTmp.toString());
                         this.interpret(this.bfo.getMethods()[methodId].toCharArray(),this.bfo);
                         break;
+                    case '&':
+                         returnValue = true;
+                         i++;
                     case '{':
-                        numberTmp = "";
+                        numberTmp = new StringBuilder();
                         i++;
                         while(arr[i] != '}'){
-                            numberTmp+=arr[i];
+                            numberTmp.append(arr[i]);
                             i++;
                         }
-                        int objIndex = Integer.parseInt(numberTmp);
+                        int objIndex = Integer.parseInt(numberTmp.toString());
                         i++;
-                        numberTmp = "";
+                        numberTmp = new StringBuilder();
                         i++;
                         while(arr[i] != '}'){
-                            numberTmp+=arr[i];
+                            numberTmp.append(arr[i]);
                             i++;
                         }
-                        int methodIndex = Integer.parseInt(numberTmp);
-                        Interpreter interpreter = new Interpreter(this.in,this.out,this.fields.length-1,this.objectDefinitions);
-                        interpreter.interpret(this.bfo.getMethods()[methodIndex].toCharArray(),this.bfo.getObject(objIndex));
+                          ++i;
+                        if(i >= arr.length){i = arr.length-1;}
+                        if(arr[i] == '('){
+                            i++;
+                            int[] tmp = this.bfo.getObject(objIndex).getVariables();
+                            int a = 0;
+                            while(arr[i] != ')'){
 
+                                StringBuilder varNumberTmp = new StringBuilder();
+                                while(arr[i] != '|' && arr[i] != ')'){
+                                    varNumberTmp.append(arr[i]);
+                                    i++;
+                                }
+
+                                if(!varNumberTmp.toString().isEmpty()) {
+                                    tmp[a] = this.fields[Integer.parseInt(varNumberTmp.toString())];
+                                    a++;
+                                }
+                                if(arr[i] == '|'){
+                                    i++;
+                                }
+                            }
+                            i++;
+                        }
+                        int methodIndex = Integer.parseInt(numberTmp.toString());
+                        Interpreter interpreter = new Interpreter(this.in,this.out,this.fields.length-1,this.objectDefinitions);
+                        interpreter.interpret(this.bfo.getObject(objIndex).getMethods()[methodIndex].toCharArray(),this.bfo.getObject(objIndex));
+                        if(returnValue){
+                            this.fields[pointer] = this.bfo.getObject(objIndex).getVariables()[0];
+                        }
                         break;
                     case '@':
                         pointer = 0;
@@ -133,19 +163,26 @@ public class Interpreter {
                     case '$':
                         this.fields = new int[fields.length-1];
                         break;
-                    case ':':
+                    case '?':
                         i++;
                         if(arr[i] == '{'){
-                             numberTmp = "";
+                             numberTmp = new StringBuilder();
                              i++;
                             while(arr[i] != '}'){
-                                numberTmp+=arr[i];
+                                numberTmp.append(arr[i]);
                                 i++;
                             }
-                            int number = Integer.parseInt(numberTmp);
+                            int number = Integer.parseInt(numberTmp.toString());
                             this.bfo.addObject(createObject(this.objectDefinitions[number]));
                         }
                         break;
+                    case '#':
+                    case ';':
+                    case ':':
+                    case '%':
+                    case '^':
+                    case '!':
+                        throw new NotImplementedException();
                 }
             }
         }catch  (IOException e){
@@ -155,6 +192,7 @@ public class Interpreter {
         }catch(Exception e){
             throw new RuntimeException("Syntaxerror", e);
         }
+        bfo.setVariables(this.fields);
     }
 
     public void run(){
@@ -166,19 +204,17 @@ public class Interpreter {
     private BFO createObject(String objectDefinition){
 
         char[] arr = objectDefinition.toCharArray();
-        int methodCount = 0;
         BFO tmpBfo = new BFO(this.fields.length-1);
 
         for (int i = 0; i < arr.length-1;i++) {
-            if(arr[i] == '#'){
+            if(arr[i] == '¦'){
                 ++i;
-                String methode = "";
-                while(arr[i] != '#'){
-                    methode+= arr[i];
+                StringBuilder methode = new StringBuilder();
+                while(arr[i] != '¦'){
+                    methode.append(arr[i]);
                     ++i;
                 }
-                tmpBfo.addMethod(methode);
-                methodCount++;
+                tmpBfo.addMethod(methode.toString());
             }
         }
         tmpBfo.setPointer(0);

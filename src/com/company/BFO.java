@@ -10,7 +10,7 @@ public class BFO {
     public BFO(int memorySize){
         this.variables = new int[memorySize];
         this.objects = new BFO[memorySize];
-        this.methods = new String[100];
+        this.methods = new String[memorySize];
         this.pointer = 0;
     }
 

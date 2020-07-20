@@ -1,9 +1,9 @@
-& // beginn klasse
+§ // beginn klasse
 
-# //beginn methode 0
-:{0} // neus Object des Types 0;
+¦ //beginn methode 0
+?{0} // neues Object des Types 0;
 +[-[<<[+[--->]-[<<<]]]>>>-]>-.---.>..>.<<<<-.<+.>>>>>.>.<<.<-. // regulärer brainfuck code (Hello World)
-;{0}{0} // methode 0 von objekt 0 ausführen und in momentanem ort speichern
+&{0}{0} // methode 0 von objekt 0 ausführen und resultat (variable 0) in momentanen ort speichern
 
 /0\ // rufe methode 0 dieser klasse auf.
 
@@ -12,12 +12,26 @@
 @ // pointer auf 0 zurücksetzen
 $ // variabeln zurücksetzen
 
-# //ende methode 0
+¦ //ende methode 0
 
 
 
-# // beginn methode 1
+¦ // beginn methode 1
 ...
-# // ende methode 1
+¦ // ende methode 1
 
-& // ende klasse
+§ // ende klasse
+
+zusätzlich kompatibel zu Brainfuck++(in der Zukunft):
+
+
+Command	                        Description
+    #	        Opens a file for reading and writing, second call closes the file.
+    ;	        Writes the ASCII character at the current cell to the file, overwriting existing text.
+    :	        Reads a character from the file, puts the value of the ASCII character in the cell and advances the file pointer.
+    %	        Opens a socket for reading and writing, second call closes the socket.
+    ^	        Sends the ASCII character at the current cell.
+    !	        Reads a character from the socket and places its ASCII value in the current cell.
+
+    http://www.jitunleashed.com/bf/index.html
+    http://www.jitunleashed.com/bf/spec.txt
