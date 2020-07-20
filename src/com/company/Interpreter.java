@@ -37,7 +37,7 @@ public class Interpreter {
         this.bfo = bfo;
         this.fields = bfo.getVariables();
         this.openedLoops.clear();
-        int pointer = 0;
+        int pointer = bfo.getPointer();
         try {
             for (int i = 0; i < arr.length-1;i++) {
                 switch (arr[i]) {
@@ -125,6 +125,13 @@ public class Interpreter {
                         int methodIndex = Integer.parseInt(numberTmp);
                         Interpreter interpreter = new Interpreter(this.in,this.out,this.fields.length-1,this.objectDefinitions);
                         interpreter.interpret(this.bfo.getMethods()[methodIndex].toCharArray(),this.bfo.getObject(objIndex));
+
+                        break;
+                    case '@':
+                        pointer = 0;
+                        break;
+                    case '$':
+                        this.fields = new int[fields.length-1];
                         break;
                     case ':':
                         i++;
@@ -136,7 +143,7 @@ public class Interpreter {
                                 i++;
                             }
                             int number = Integer.parseInt(numberTmp);
-                            createObject(this.objectDefinitions[number]);
+                            this.bfo.addObject(createObject(this.objectDefinitions[number]));
                         }
                         break;
                 }
@@ -148,14 +155,19 @@ public class Interpreter {
         }catch(Exception e){
             throw new RuntimeException("Syntaxerror", e);
         }
-        bfo.setVariables(this.fields);
     }
 
-    private void createObject(String objectDefinition){
+    public void run(){
+        BFO bfo = createObject(this.objectDefinitions[0]);
+        this.bfo = bfo;
+        this.interpret(bfo.getMethods()[0].toCharArray(),bfo);
+    }
+
+    private BFO createObject(String objectDefinition){
 
         char[] arr = objectDefinition.toCharArray();
         int methodCount = 0;
-        BFO bfo = new BFO(this.fields.length-1);
+        BFO tmpBfo = new BFO(this.fields.length-1);
 
         for (int i = 0; i < arr.length-1;i++) {
             if(arr[i] == '#'){
@@ -165,12 +177,13 @@ public class Interpreter {
                     methode+= arr[i];
                     ++i;
                 }
-                bfo.addMethod(methode);
+                tmpBfo.addMethod(methode);
                 methodCount++;
             }
         }
-        this.bfo.addObject(bfo);
+        tmpBfo.setPointer(0);
 
+        return tmpBfo;
     }
 
 }

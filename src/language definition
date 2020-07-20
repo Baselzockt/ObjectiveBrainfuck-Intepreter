@@ -1,0 +1,23 @@
+& // beginn klasse
+
+# //beginn methode 0
+:{0} // neus Object des Types 0;
++[-[<<[+[--->]-[<<<]]]>>>-]>-.---.>..>.<<<<-.<+.>>>>>.>.<<.<-. // regulärer brainfuck code (Hello World)
+;{0}{0} // methode 0 von objekt 0 ausführen und in momentanem ort speichern
+
+/0\ // rufe methode 0 dieser klasse auf.
+
+{1}{0}(0|1|3)  // methode 0 von objekt 1 wird aufgerufen und die werte der 0. 1. und 3. variabel werden mitgegeben.
+
+@ // pointer auf 0 zurücksetzen
+$ // variabeln zurücksetzen
+
+# //ende methode 0
+
+
+
+# // beginn methode 1
+...
+# // ende methode 1
+
+& // ende klasse
