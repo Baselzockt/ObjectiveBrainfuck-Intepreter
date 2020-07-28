@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BrainFuckInterpreter.iml" filepath="$PROJECT_DIR$/BrainFuckInterpreter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Plugins/Plugins.iml" filepath="$PROJECT_DIR$/Plugins/Plugins.iml" />
     </modules>
   </component>
 </project>
