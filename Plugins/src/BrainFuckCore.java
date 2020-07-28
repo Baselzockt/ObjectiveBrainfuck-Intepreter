@@ -3,7 +3,7 @@ import com.company.Interpreter;
 
 import java.io.IOException;
 
-public class BrainfuckCore implements IPlugin {
+public class BrainFuckCore implements IPlugin {
     @Override
     public int interpret(char[] arr, int i, Interpreter ip) throws IOException {
         switch(arr[i]){

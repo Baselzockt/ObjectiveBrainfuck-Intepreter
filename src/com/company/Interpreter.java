@@ -71,7 +71,11 @@ public class Interpreter {
 
     private HashSet<IPlugin> plugins;
 
-    public Interpreter(InputStream input,OutputStream output, int memorySize,String[] definitions, HashSet<IPlugin> plugins){
+    public HashSet<IPlugin> getPlugins() {
+        return plugins;
+    }
+
+    public Interpreter(InputStream input, OutputStream output, int memorySize, String[] definitions, HashSet<IPlugin> plugins){
         this.in = input;
         this.out = output;
         this.fields = new int[memorySize];
@@ -96,109 +100,10 @@ public class Interpreter {
          pointer = bfo.getPointer();
         try {
             for (int i = 0; i < arr.length;i++) {
-               boolean returnValue = false;
-                switch (arr[i]) {
-
-                    case '/':
-                        i++;
-                        StringBuilder numberTmp = new StringBuilder();
-                        while(arr[i] != '\\'){
-                            numberTmp.append(arr[i]);
-                            i++;
-                        }
-                        int methodId = Integer.parseInt(numberTmp.toString());
-                        this.interpret(this.bfo.getMethods()[methodId].toCharArray(),this.bfo);
-                        break;
-                    case '&':
-                         returnValue = true;
-                         i++;
-                    case '{':
-                        numberTmp = new StringBuilder();
-                        i++;
-                        while(arr[i] != '}'){
-                            numberTmp.append(arr[i]);
-                            i++;
-                        }
-                        int objIndex;
-                        if(numberTmp.toString().contains("*")){
-                            String tmp = numberTmp.toString().replace("*","");
-                            objIndex = this.fields[Integer.parseInt(tmp)];
-                        }else {
-                            objIndex = Integer.parseInt(numberTmp.toString());
-                        }
-                        i++;
-                        numberTmp = new StringBuilder();
-                        i++;
-                        while(i < arr.length && arr[i] != '}' ){
-                            numberTmp.append(arr[i]);
-                            i++;
-                        }
-                          ++i;
-                        if(i >= arr.length){i = arr.length-1;}
-                        if(arr[i] == '('){
-                            i++;
-                            int[] tmp = this.bfo.getObject(objIndex).getVariables();
-                            int a = 0;
-                            while(arr[i] != ')'){
-
-                                StringBuilder varNumberTmp = new StringBuilder();
-                                while(arr[i] != '|' && arr[i] != ')'){
-                                    varNumberTmp.append(arr[i]);
-                                    i++;
-                                }
-
-                                if(!varNumberTmp.toString().isEmpty()) {
-                                    tmp[a] = this.fields[Integer.parseInt(varNumberTmp.toString())];
-                                    a++;
-                                }
-                                if(arr[i] == '|'){
-                                    i++;
-                                }
-                            }
-                            i++;
-                        }
-                        if(!numberTmp.toString().isEmpty()) {
-                            int methodIndex;
-                            if(numberTmp.toString().contains("*")){
-                                String tmp = numberTmp.toString().replace("*","");
-                                methodIndex = this.fields[Integer.parseInt(tmp)];
-                            }else {
-                                methodIndex = Integer.parseInt(numberTmp.toString());
-                            }
-                            Interpreter interpreter = new Interpreter(this.in, this.out, this.fields.length - 1, this.objectDefinitions,this.plugins);
-                            interpreter.interpret(this.bfo.getObject(objIndex).getMethods()[methodIndex].toCharArray(), this.bfo.getObject(objIndex));
-                            if (returnValue) {
-                                this.fields[pointer] = this.bfo.getObject(objIndex).getVariables()[0];
-                            }
-                            i--;
-                        }
-                        break;
-                    case '@':
-                        pointer = 0;
-                        break;
-                    case '$':
-                        this.fields = new int[fields.length-1];
-                        break;
-                    case '?':
-                        i++;
-                        if(arr[i] == '{'){
-                             numberTmp = new StringBuilder();
-                             i++;
-                            while(arr[i] != '}'){
-                                numberTmp.append(arr[i]);
-                                i++;
-                            }
-                            int number = Integer.parseInt(numberTmp.toString());
-                            this.bfo.addObject(createObject(this.objectDefinitions[number]));
-                        }
-                        break;
-                    default:
-                        if(plugins != null) {
-                            for (IPlugin plugin : plugins) {
-                                i = plugin.interpret(arr, i, this);
-                            }
-                        }
-                        break;
+                if(plugins != null) {
+                    for (IPlugin plugin : plugins) {
+                        i = plugin.interpret(arr, i, this);
+                    }
                 }
             }
         }catch  (IOException e){
@@ -217,7 +122,7 @@ public class Interpreter {
         this.interpret(bfo.getMethods()[0].toCharArray(),bfo);
     }
 
-    private BFO createObject(String objectDefinition){
+    public BFO createObject(String objectDefinition){
 
         char[] arr = objectDefinition.toCharArray();
         BFO tmpBfo = new BFO(this.fields.length-1);

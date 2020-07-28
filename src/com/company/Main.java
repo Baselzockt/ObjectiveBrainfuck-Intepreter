@@ -88,7 +88,6 @@ public class Main {
 
 
             plugins.forEach(IPlugin::initialize);
-            System.out.println("Initialized "+ plugins.size()+" plugins");
         }
     }
 }
