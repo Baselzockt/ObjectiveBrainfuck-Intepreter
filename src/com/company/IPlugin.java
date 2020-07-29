@@ -4,8 +4,8 @@ import java.io.IOException;
 
 public interface IPlugin {
     /**
-     * Takes the array of chacracters to be interpretet, the current index and a reference to the Interpreter and Interprets them.
-     * Note that IPlugin.interpret gets called last and can't be used to override default implementations.
+     * Takes the array of characters to be interpreted, the current index and a reference to the Interpreter and Interprets them.
+     * Note that Plugins dont get called in a fixed order and can't be used to override other implementations.
      * @param arr
      * @param i
      * @param ip

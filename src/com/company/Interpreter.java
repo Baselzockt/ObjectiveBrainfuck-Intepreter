@@ -22,7 +22,6 @@ public class Interpreter {
         return MEMORYSIZE;
     }
 
-
     public PluginHandler getPluginHandler() {
         return pluginHandler;
     }
