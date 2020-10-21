@@ -1,27 +1,29 @@
-§ // beginn klasse
-¦ //beginn methode 0
-?{0} // neues Object des Types 0;
-+[-[<<[+[--->]-[<<<]]]>>>-]>-.---.>..>.<<<<-.<+.>>>>>.>.<<.<-. // regulärer brainfuck code (Hello World)
-&{0}{0} // methode 0 von objekt 0 ausführen und resultat (variable 0) in momentanen ort speichern
+ObjectiveBrainfuck class structure:
 
-/0\ // rufe methode 0 dieser klasse auf.
+§ // begin class
+¦ //begin method 0
+?{0} // new Object of Type 0;
++[-[<<[+[--->]-[<<<]]]>>>-]>-.---.>..>.<<<<-.<+.>>>>>.>.<<.<-. // regular brainfuck code (Hello World) every brainfuck command is valid
+&{0}{0} //call method 0 of object 0  and save result (variable 0) in current location
 
-{1}{0}(0|1|3)  // methode 0 von objekt 1 wird aufgerufen und die werte der 0. 1. und 3. variabel werden mitgegeben.
+/0\ // call method 0 of the current class
 
-@ // pointer auf 0 zurücksetzen
-$ // variabeln zurücksetzen
+{1}{0}(0|1|3)  // method 0 of object 1 gets called and the values of variables 0. 1. and 3. will be passed.
 
-¦ //ende methode 0
+@ // reset pointer to zero
+$ //reset variables on tape
+
+¦ //end method 0
 
 
 
-¦ // beginn methode 1
+¦ // begin method 1
 ...
-¦ // ende methode 1
+¦ // end method 1
 
-§ // ende klasse
+§ // end class
 
-zusätzlich kompatibel zu Brainfuck++(in der Zukunft):
+reserved characters to be able to archive brainfuck++ compatibility:
 
 
 Command	                        Description
