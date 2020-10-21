@@ -1,6 +1,4 @@
-package com.company;
-
-import java.io.IOException;
+package ch.baselzockt;
 
 public interface IPlugin {
     /**

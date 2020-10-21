@@ -1,5 +1,5 @@
-import com.company.IPlugin;
-import com.company.Interpreter;
+import ch.baselzockt.IPlugin;
+import ch.baselzockt.Interpreter;
 
 import java.io.IOException;
 

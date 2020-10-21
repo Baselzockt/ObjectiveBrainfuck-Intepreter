@@ -1,4 +1,4 @@
-package com.company;
+package ch.baselzockt;
 
 public class BFO {
 

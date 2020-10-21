@@ -1,4 +1,4 @@
-package com.company;
+package ch.baselzockt;
 
 import java.io.File;
 import java.io.FileInputStream;
